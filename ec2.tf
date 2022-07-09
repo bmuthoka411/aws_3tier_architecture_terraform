@@ -5,9 +5,9 @@
 ########################################################
 
 resource "aws_instance" "web" {
-  ami           = "ami-08df646e18b182346"
+  ami           = "ami-08d4ac5b634553e16"
   instance_type = "t2.micro"
-  key_name = "pswain"
+  key_name = "newsimplexkeypair"
   subnet_id = aws_subnet.public[count.index].id
   vpc_security_group_ids = [aws_security_group.allow_tls.id]
   associate_public_ip_address = true
@@ -18,22 +18,22 @@ resource "aws_instance" "web" {
   }
 
   provisioner "file" {
-    source = "./pswain.pem"
-    destination = "/home/ec2-user/pswain.pem"
+    source = "./newsimplexkeypair.ppk"
+    destination = "/home/ec2-user/newsimplexkeypair.ppk"
   
     connection {
       type = "ssh"
       host = self.public_ip
       user = "ec2-user"
-      private_key = "${file("./pswain.pem")}"
+      private_key = "${file("./newsimplexkeypair.ppk")}"
     }  
   }
 }
 
 resource "aws_instance" "db" {
-  ami           = "ami-08df646e18b182346"
+  ami           = "ami-08d4ac5b634553e16"
   instance_type = "t2.micro"
-  key_name = "pswain"
+  key_name = "newsimplexkeypair"
   subnet_id = aws_subnet.private.id
   vpc_security_group_ids = [aws_security_group.allow_tls_db.id]
 
